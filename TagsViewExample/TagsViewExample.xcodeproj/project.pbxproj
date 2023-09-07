@@ -14,6 +14,7 @@
 		DBEC5A022AA9D35F00F0640D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DBEC5A012AA9D35F00F0640D /* Assets.xcassets */; };
 		DBEC5A052AA9D35F00F0640D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DBEC5A032AA9D35F00F0640D /* LaunchScreen.storyboard */; };
 		DBEC5A0D2AA9D3D000F0640D /* TagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEC5A0C2AA9D3CF00F0640D /* TagsView.swift */; };
+		DBEC5A0F2AA9DEAA00F0640D /* AlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEC5A0E2AA9DEAA00F0640D /* AlignedCollectionViewFlowLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +26,8 @@
 		DBEC5A012AA9D35F00F0640D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DBEC5A042AA9D35F00F0640D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DBEC5A062AA9D35F00F0640D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DBEC5A0C2AA9D3CF00F0640D /* TagsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsView.swift; sourceTree = SOURCE_ROOT; };
+		DBEC5A0C2AA9D3CF00F0640D /* TagsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TagsView.swift; path = TagsViewExample/TagsView/TagsView.swift; sourceTree = SOURCE_ROOT; };
+		DBEC5A0E2AA9DEAA00F0640D /* AlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +60,7 @@
 		DBEC59F72AA9D35D00F0640D /* TagsViewExample */ = {
 			isa = PBXGroup;
 			children = (
-				DBEC5A0C2AA9D3CF00F0640D /* TagsView.swift */,
+				DBEC5A102AA9DEAE00F0640D /* TagsView */,
 				DBEC59F82AA9D35D00F0640D /* AppDelegate.swift */,
 				DBEC59FA2AA9D35D00F0640D /* SceneDelegate.swift */,
 				DBEC59FC2AA9D35D00F0640D /* ViewController.swift */,
@@ -68,6 +70,15 @@
 				DBEC5A062AA9D35F00F0640D /* Info.plist */,
 			);
 			path = TagsViewExample;
+			sourceTree = "<group>";
+		};
+		DBEC5A102AA9DEAE00F0640D /* TagsView */ = {
+			isa = PBXGroup;
+			children = (
+				DBEC5A0C2AA9D3CF00F0640D /* TagsView.swift */,
+				DBEC5A0E2AA9DEAA00F0640D /* AlignedCollectionViewFlowLayout.swift */,
+			);
+			path = TagsView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -144,6 +155,7 @@
 				DBEC59FD2AA9D35D00F0640D /* ViewController.swift in Sources */,
 				DBEC59F92AA9D35D00F0640D /* AppDelegate.swift in Sources */,
 				DBEC59FB2AA9D35D00F0640D /* SceneDelegate.swift in Sources */,
+				DBEC5A0F2AA9DEAA00F0640D /* AlignedCollectionViewFlowLayout.swift in Sources */,
 				DBEC5A0D2AA9D3D000F0640D /* TagsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

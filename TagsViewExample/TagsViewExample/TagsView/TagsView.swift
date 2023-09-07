@@ -33,11 +33,20 @@ class TagsView:UIView {
     var isRTL:Bool? {
         didSet{
             guard let isRTL = isRTL else {return}
-            if isRTL {
-                let layout = RTLCollectionViewFlowLayout()
-                layout.scrollDirection = .horizontal
-                TagsCV.collectionViewLayout = layout
-                TagsCV.semanticContentAttribute = .forceRightToLeft
+            if isVertical == true {
+                let alignedFlowLayout = AlignedCollectionViewFlowLayout(
+                    horizontalAlignment: isRTL ? .right : .left,
+                    verticalAlignment: .top
+                )
+                alignedFlowLayout.scrollDirection = isVertical == true ? .vertical : .horizontal
+                TagsCV.collectionViewLayout = alignedFlowLayout
+            }else {
+                if isRTL {
+                    let layout = UICollectionViewFlowLayout()
+                    layout.scrollDirection = .horizontal
+                    TagsCV.semanticContentAttribute = .forceRightToLeft
+                    TagsCV.collectionViewLayout = layout
+                }
             }
         }
     }
@@ -81,13 +90,25 @@ class TagsView:UIView {
     var isVertical:Bool? {
         didSet{
             guard let isVertical = isVertical else {return}
-            if isVertical {
-                if let layout: UICollectionViewFlowLayout = self.TagsCV.collectionViewLayout as? UICollectionViewFlowLayout {
-                    layout.scrollDirection = .vertical
+            if isVertical{
+                let alignedFlowLayout = AlignedCollectionViewFlowLayout(
+                    horizontalAlignment: isRTL == true ? .right : .left,
+                    verticalAlignment: .top
+                )
+                alignedFlowLayout.scrollDirection =  isVertical ? .vertical : .horizontal
+                TagsCV.collectionViewLayout = alignedFlowLayout
+            }else {
+                if isRTL == true {
+                    let layout = UICollectionViewFlowLayout()
+                    layout.scrollDirection = .horizontal
+                    TagsCV.semanticContentAttribute = .forceRightToLeft
+                    TagsCV.collectionViewLayout = layout
                 }
             }
         }
     }
+    
+    var tagsViewHeight:CGFloat = 50
     
     var enableCloseButton:Bool = true
     
@@ -171,10 +192,22 @@ class TagsView:UIView {
         TagsCV.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         TagsCV.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         TagsCV.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        TagsCV.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         TagsCV.register(TagsCell.self, forCellWithReuseIdentifier: "TagsCell")
         TagsCV.dataSource = self
         TagsCV.delegate = self
+    }
+    
+    
+    override func layoutSubviews() {
+        if (isVertical == nil || isVertical == false) {
+            if tagsViewHeight > 50 {
+                TagsCV.heightAnchor.constraint(equalToConstant: tagsViewHeight + 10).isActive = true
+            }else{
+                TagsCV.heightAnchor.constraint(equalToConstant:  60).isActive = true
+            }
+        }else {
+            TagsCV.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        }
     }
 }
 
@@ -239,8 +272,8 @@ private class TagsCell:UICollectionViewCell {
             tagLbl.trailingAnchor.constraint(equalTo: closeBtn.leadingAnchor , constant: -4).isActive = true
             closeBtn.trailingAnchor.constraint(equalTo: tagBackground.trailingAnchor , constant: -8).isActive = true
         }
-        closeBtn.topAnchor.constraint(equalTo: tagBackground.topAnchor , constant: 4).isActive = true
-        closeBtn.bottomAnchor.constraint(equalTo: tagBackground.bottomAnchor , constant: -4).isActive = true
+        closeBtn.heightAnchor.constraint(equalToConstant: 12).isActive = true
+        closeBtn.centerYAnchor.constraint(equalTo: tagBackground.centerYAnchor).isActive = true
         closeBtn.widthAnchor.constraint(equalToConstant: 12).isActive = true
         
         tagLbl.centerYAnchor.constraint(equalTo: tagBackground.centerYAnchor).isActive = true
@@ -288,11 +321,11 @@ extension TagsView:UICollectionViewDelegate , UICollectionViewDataSource , UICol
     
     internal  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = calculateLabelWidth(for: tags?[indexPath.row] ?? "", font: font, padding: 12)
-        return CGSize(width: width, height: collectionView.frame.height)
+        return CGSize(width: width, height: tagsViewHeight > 50 ? tagsViewHeight : 50)
     }
     
     internal func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        //to implement multiple selections
     }
     
     private func calculateLabelWidth(for content: String, font: UIFont?, padding: CGFloat) -> CGFloat {
@@ -301,46 +334,5 @@ extension TagsView:UICollectionViewDelegate , UICollectionViewDataSource , UICol
         label.text = content
         label.sizeToFit()
         return label.frame.width + 30
-    }
-}
-class RTLCollectionViewFlowLayout: UICollectionViewFlowLayout {
-    
-    override var flipsHorizontallyInOppositeLayoutDirection: Bool {
-        return true
-    }
-    
-    override var developmentLayoutDirection: UIUserInterfaceLayoutDirection {
-        return UIUserInterfaceLayoutDirection.rightToLeft
-    }
-    
-    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?
-    {
-        guard let attrsArr = super.layoutAttributesForElements(in: rect) else {
-            return nil
-        }
-        guard let collectionView = self.collectionView else { return attrsArr }
-        if self.collectionViewContentSize.width > collectionView.bounds.width {
-            return attrsArr
-        }
-        
-        let remainingSpace = collectionView.bounds.width - self.collectionViewContentSize.width
-        
-        for attr in attrsArr {
-            attr.frame.origin.x += remainingSpace
-        }
-        
-        return attrsArr
-    }
-    
-    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        guard let attrs = super.layoutAttributesForItem(at: indexPath) else { return nil }
-        guard let collectionView = self.collectionView else { return attrs }
-        if self.collectionViewContentSize.width > collectionView.bounds.width {
-            return attrs
-        }
-        
-        let remainingSpace = collectionView.bounds.width - self.collectionViewContentSize.width
-        attrs.frame.origin.x += remainingSpace
-        return attrs
     }
 }
